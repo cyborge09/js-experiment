@@ -1,0 +1,46 @@
+
+.mainContainer{
+    position:relative;
+    margin:0 auto;
+    width:400px;
+}
+
+.gameContainer
+{
+    position:absolute;
+    width:400px;
+    height:600px;
+    overflow: hidden;
+    background: url("images/clouds.jpg");
+    background-repeat:repeat-y;
+}
+
+.enemy-car{
+    position:absolute;
+    width:100px;
+    height:100px;
+    background-image:url("images/enemycar.png");
+}
+
+.herocar {
+    position:absolute; 
+    width:100px;
+    height:100px;
+    background-image:url("images/batmobile.png");
+}
+
+
+.score {
+    position:absolute;
+    width: auto;
+    height: auto;
+    background: white;
+    font: oblique bolder monospace;
+    font-size: 35px;
+    color: black;
+    left: 20px;
+    top:20px;
+    border-color: black;
+    border-radius: 5px;
+
+}
