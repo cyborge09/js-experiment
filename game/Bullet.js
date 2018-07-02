@@ -17,6 +17,7 @@ function Bullet(props)
 
     self.createbullet = function ()
     {
+        
         console.log("bulletinside");
         $bullet.className = "bullets";
         console.log($bullet);
