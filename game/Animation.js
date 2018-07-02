@@ -12,7 +12,7 @@ function Animation(props)
     var bullets = [];
     var bulletcounet = 0;
     var $gameContainer = props.backgroundframe.gamecontainer;
-
+    self.intervalRef;
 
     var hero = props.hero;
     var isRunning = false;
@@ -49,7 +49,7 @@ function Animation(props)
                         backgroundframe.updateBullets(bullets);
                         
                         bulletcounet++;
-                    }, delay);
+                    }, 15);
         }
     };
 

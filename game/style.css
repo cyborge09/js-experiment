@@ -53,3 +53,17 @@ background:yellow;
 border-top-left-radius:5px;
 border-top-right-radius:5px;
 }
+
+.gameover {
+    position:absolute;
+    width:400px;
+    height:600px;
+    background: url("images/gameoverbackground.png");
+}
+
+.restart_btn {
+    position:absolute;
+    width:100px;
+    height:100px;
+    color: white;
+}

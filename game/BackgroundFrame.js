@@ -8,16 +8,16 @@ function BackgroundFrame(props)
 {
 
     var self = this;
-    var speed = props.speed || 5;
-    var y = 0;
-    self.bullets = 0;
+    speed = props.speed || 5;
+    y = 0;
+    self.bullets;
     var enemy;
     self.score = 0;
     var speedratio = 0;
     var hero = props.hero;
     var $hero = props.$hero;
     var enemies = [];
-    self.count = 0;
+    count = 0;
 
     var $scoreboard = document.getElementById("score");
     var $gameContainer = props.backgroundframe.gamecontainer;
@@ -26,6 +26,8 @@ function BackgroundFrame(props)
     self.updateBackground = function () {
         $gameContainer.style.backgroundPosition = "0px " + y + "px";
         y = y + speed;
+        console.log("speed=", speed);
+        console.log("y=", y);
         speedratio++;
         if (speedratio > 500)
         {
@@ -39,14 +41,14 @@ function BackgroundFrame(props)
     self.createEnemies = function ()
     {
 
-        self.count++;
-        if (self.count > (80 - (speed * 3)))
+        count++;
+        if (count > (80 - (speed * 3)))
         {
 
             enemy = new Enemy({$el: $gameContainer});
             enemies.push(enemy);
             enemy.createEnemy();
-            self.count = 0;
+            count = 0;
         }
 
     };
@@ -88,16 +90,20 @@ function BackgroundFrame(props)
     {
         enemies.forEach(function (oneenemy)
         {
-            if ((Math.abs(oneenemy.x - hero.carX)) < 100 && (Math.abs(oneenemy.y - hero.carY) < 100))
+            if (oneenemy !== null)
             {
-                alert("GAME OVER");
-//                
+                if ((Math.abs(oneenemy.x - hero.carX)) < 100 && (Math.abs(oneenemy.y - hero.carY) < 100))
+                {
+                    alert("GAME OVER");
+////                
 //                enemies = [];
 //                speed = undefined;
 //                delete score;
-//                self.reset();
+//                    self.reset();
                 location.reload();
+                }
             }
+
         });
     };
 
@@ -112,28 +118,33 @@ function BackgroundFrame(props)
         }
         enemies = self.clearArray(temp_enemys);
         console.log(enemies);
-
-        var temp_bullets = self.bullets;
-        for (var y = 0; y < temp_bullets.length; y++)
-        {
-            if (temp_bullets[y] !== null)
-            {
-                temp_bullets[y].deleteBullet();
-                temp_bullets[y] = null;
-            }
-
-        }
-        self.bullets = self.clearBulletArray(temp_bullets);
-        console.log(self.bullets);
-        y=0;
-        speed = 0;
+//
+//        var temp_bullets = self.bullets;
+//        for (var y = 0; y < temp_bullets.length; y++)
+//        {
+//            if (temp_bullets[y] !== null)
+//            {
+//                temp_bullets[y].deleteBullet();
+//                temp_bullets[y] = null;
+//            }
+//
+//        }
+//        self.bullets = self.clearBulletArray(temp_bullets);
+//        console.log(self.bullets);
+        delete count;
+//        self.score = 0;
+//        delete y;
+//        delete speed;
+//        $gameContainer.style.backgroundPosition = "0px" + "0px";
+//        self.bullets.bulletX = 0;
+//        self.bullets.bulletY = 0;
         resetGame();
     };
 
     self.bulletEnemiesCollision = function (oneenemy, bullet)
     {
 
-        if (bullet !== null)
+        if (bullet !== null && oneenemy !== null)
         {
             if ((Math.abs(oneenemy.y - bullet.bulletY)) < 100 && ((oneenemy.x < bullet.bulletX) && (oneenemy.x + 100 > bullet.bulletX)))
             {
