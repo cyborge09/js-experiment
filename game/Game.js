@@ -4,10 +4,11 @@
  * and open the template in the editor.
  */
 
-function reset()
+function resetGame()
 {
-    
     var $mainContainer = document.getElementById("mainContainer");
+    var $gameContainer = document.getElementById("gameContainer");
+    
     var $hero = new Hero();
     $hero.initializeCar();
 
@@ -16,8 +17,8 @@ function reset()
                 delay: 15,
                 backgroundframe:
                         {
-                            speed: 1,
-                            $maincontainer: $mainContainer
+                            gamecontainer: $gameContainer
+                           
                         },
                 hero: $hero
             });
@@ -51,9 +52,11 @@ function reset()
             $hero.update(-1);
 
         }
+      
 
 
     });
-
 }
-    reset();
+
+resetGame();
+ 

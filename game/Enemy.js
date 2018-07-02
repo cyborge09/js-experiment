@@ -13,27 +13,27 @@ function Enemy(props)
     self.x = 0;
     self.y = -100;
     self.dy = 0;
-    self.health = 5;
+    self.health = 3;
     self.elem = document.createElement('div');
 
     self.createEnemy = function () {
-       
+
         self.elem.className = "enemy-car";
         self.x = randomX();
         self.elem.style.left = self.x + "px";
         self.elem.style.top = self.y + "px";
         $parent.appendChild(self.elem);
     };
-    
+
     self.updateEnemy = function (speed) {
         self.dy = speed;
         self.y = self.y + self.dy;
         self.elem.style.top = self.y + "px";
     };
-    
-    
+
+
     self.deleteEnemy = function () {
-        
+
         $parent.removeChild(self.elem);
     };
 

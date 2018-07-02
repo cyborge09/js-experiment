@@ -7,8 +7,13 @@
 
 function Animation(props)
 {
-    
+
     var self = this;
+    var bullets = [];
+    var bulletcounet = 0;
+    var $gameContainer = props.backgroundframe.gamecontainer;
+
+
     var hero = props.hero;
     var isRunning = false;
     var delay = props.delay || 15;
@@ -19,8 +24,9 @@ function Animation(props)
     {
         backgroundframe = new BackgroundFrame(
                 {
-                    backgroundframe :props.backgroundframe,
-                    hero : hero
+                    backgroundframe: props.backgroundframe,
+                    hero: hero
+
                 });
     };
 
@@ -40,7 +46,9 @@ function Animation(props)
                         backgroundframe.updateEnemies();
                         backgroundframe.heroEnemiesCollison();
                         backgroundframe.scoreboard();
-
+                        backgroundframe.updateBullets(bullets);
+                        
+                        bulletcounet++;
                     }, delay);
         }
     };
@@ -57,7 +65,27 @@ function Animation(props)
     self.resume = function ()
     {
         self.start();
+        isRunning = true;
     };
+
+    document.addEventListener('keydown', function (e)
+    {
+        if (e.keyCode === 32)
+        {
+            if (bulletcounet >3)
+            {
+                var bullet = new Bullet(
+                        {
+                            hero: hero,
+                            gamecontainer: $gameContainer
+                        });
+                bullet.createbullet();
+                bullets.push(bullet);
+                bulletcounet=0;
+            }
+
+        }
+    });
 
     self.init();
 }
