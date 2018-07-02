@@ -10,8 +10,7 @@ function Bullet(props)
     var self = this;
     self.hero = props.hero;
     self.gamecontainer = props.gamecontainer;
-    self.bulletY = 0;
-    self.bulletX = 0;
+  
     
     var $bullet = document.createElement("div");
 
@@ -24,7 +23,7 @@ function Bullet(props)
         self.bulletX = self.hero.carX + 46;
         self.bulletY = self.hero.carY;
         $bullet.style.left = self.bulletX + "px";
-        $bullet.style.top = self.bulletY + "px";
+        $bullet.style.top = self.bulletY-10 + "px";
         self.gamecontainer.appendChild($bullet);
     };
     

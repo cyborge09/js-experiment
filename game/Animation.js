@@ -12,8 +12,6 @@ function Animation(props)
     var bullets = [];
     var bulletcounet = 0;
     var $gameContainer = props.backgroundframe.gamecontainer;
-    self.intervalRef;
-
     var hero = props.hero;
     var isRunning = false;
     var delay = props.delay || 15;
@@ -33,7 +31,7 @@ function Animation(props)
 
     self.start = function ()
     {
-
+        
         if (!isRunning)
         {
             isRunning = true;
@@ -44,12 +42,12 @@ function Animation(props)
                         backgroundframe.updateBackground();
                         backgroundframe.createEnemies();
                         backgroundframe.updateEnemies();
-                        backgroundframe.heroEnemiesCollison();
+                        backgroundframe.heroEnemiesCollison(self.intervalRef);
                         backgroundframe.scoreboard();
                         backgroundframe.updateBullets(bullets);
                         
                         bulletcounet++;
-                    }, 15);
+                    }, delay);
         }
     };
 

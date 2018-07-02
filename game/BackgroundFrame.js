@@ -15,13 +15,13 @@ function BackgroundFrame(props)
     self.score = 0;
     var speedratio = 0;
     var hero = props.hero;
-    var $hero = props.$hero;
     var enemies = [];
     count = 0;
-
+    var $gameover = document.getElementById("gameover");
     var $scoreboard = document.getElementById("score");
     var $gameContainer = props.backgroundframe.gamecontainer;
-
+    var $restart_btn = document.getElementById("restart_btn");
+    var $gameoverscore = document.getElementById("gameoverscore");
 
     self.updateBackground = function () {
         $gameContainer.style.backgroundPosition = "0px " + y + "px";
@@ -86,7 +86,7 @@ function BackgroundFrame(props)
         return temp;
     };
 
-    self.heroEnemiesCollison = function ()
+    self.heroEnemiesCollison = function (interval)
     {
         enemies.forEach(function (oneenemy)
         {
@@ -94,13 +94,17 @@ function BackgroundFrame(props)
             {
                 if ((Math.abs(oneenemy.x - hero.carX)) < 100 && (Math.abs(oneenemy.y - hero.carY) < 100))
                 {
-                    alert("GAME OVER");
-////                
-//                enemies = [];
-//                speed = undefined;
-//                delete score;
-//                    self.reset();
-                location.reload();
+                    hero.$hero.style.backgroundImage = "url(images/boom.gif)";
+                    clearInterval(interval);
+                    $gameover.style.display = "block";
+                    $gameoverscore.innerHTML = "SCORE :" + self.score;
+                    $restart_btn.onclick = function ()
+                    {
+
+                        console.log("gameover");
+
+                        self.reset();
+                    };
                 }
             }
 
@@ -110,6 +114,9 @@ function BackgroundFrame(props)
 
     self.reset = function ()
     {
+
+        $gameover.style.display = "none";
+        hero.$hero.style.backgroundImage = "url(images/plane.png)";
         var temp_enemys = enemies;
         for (var i = 0; i < temp_enemys.length; i++)
         {
@@ -118,26 +125,25 @@ function BackgroundFrame(props)
         }
         enemies = self.clearArray(temp_enemys);
         console.log(enemies);
-//
-//        var temp_bullets = self.bullets;
-//        for (var y = 0; y < temp_bullets.length; y++)
-//        {
-//            if (temp_bullets[y] !== null)
-//            {
-//                temp_bullets[y].deleteBullet();
-//                temp_bullets[y] = null;
-//            }
-//
-//        }
-//        self.bullets = self.clearBulletArray(temp_bullets);
-//        console.log(self.bullets);
-        delete count;
-//        self.score = 0;
-//        delete y;
-//        delete speed;
-//        $gameContainer.style.backgroundPosition = "0px" + "0px";
-//        self.bullets.bulletX = 0;
-//        self.bullets.bulletY = 0;
+
+
+        var temp_bullets = self.bullets;
+
+        for (var y = 0; y < temp_bullets.length; y++)
+        {
+            if (temp_bullets[y] !== null)
+            {
+                temp_bullets[y].deleteBullet();
+                temp_bullets[y] = null;
+            }
+
+        }
+        self.bullets = self.clearBulletArray(temp_bullets);
+        console.log(self.bullets);
+        hero.carX = -11150;
+        hero.carY = 500;
+        self.score = 0;
+        delete speed;
         resetGame();
     };
 
@@ -148,9 +154,7 @@ function BackgroundFrame(props)
         {
             if ((Math.abs(oneenemy.y - bullet.bulletY)) < 100 && ((oneenemy.x < bullet.bulletX) && (oneenemy.x + 100 > bullet.bulletX)))
             {
-
                 return true;
-
             }
         }
 
@@ -178,8 +182,18 @@ function BackgroundFrame(props)
                     {
 
                         enemy.health -= 1;
+
+
                         if (enemy.health === 0)
                         {
+                            setInterval(function ()
+                            {
+                                console.log("here");
+                                enemy.elem.style.backgroundImage = "url(images/boom.png)";
+//                                enemy.elem.style.backgroundImage = "url(images/enemyship.png)";
+
+                            }, 15);
+
                             self.score = self.score + 1;
                             enemy.deleteEnemy();
                             enemies.splice(enemies.indexOf(enemy), 1);
@@ -225,5 +239,8 @@ function BackgroundFrame(props)
 
         return temp;
     };
+
+
+
 
 }

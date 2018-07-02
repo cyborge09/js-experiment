@@ -4,14 +4,25 @@
  * and open the template in the editor.
  */
 
+    var $homescreen = document.getElementById("homescreen");
+    $homescreen.style.display = "block";
+    var $start = document.getElementById("start");
+    $start.onclick = function()
+    {
+        console.log("here");
+        resetGame();
+    };
+
 function resetGame()
 {
+    $homescreen.style.display="none";
     var $mainContainer = document.getElementById("mainContainer");
     var $gameContainer = document.getElementById("gameContainer");
     
     var $hero = new Hero();
     $hero.initializeCar();
 
+    
     var animation = new Animation(
             {
                 delay: 15,
@@ -28,18 +39,7 @@ function resetGame()
     document.addEventListener('keydown', function (e)
     {
 
-        if (e.key === "Escape")
-        {
-
-            animation.pause();
-
-        }
-
-        if (e.key === "R" || e.key === "r") {
-
-            animation.resume();
-
-        }
+      
         if (e.key === "ArrowRight")
         {
             console.log("right");
@@ -58,5 +58,4 @@ function resetGame()
     });
 }
 
-resetGame();
  
