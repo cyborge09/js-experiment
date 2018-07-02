@@ -44,3 +44,12 @@
     border-radius: 5px;
 
 }
+
+.bullets{
+position:absolute;
+width:10px;
+height:10px;
+background:yellow;
+border-top-left-radius:5px;
+border-top-right-radius:5px;
+}
