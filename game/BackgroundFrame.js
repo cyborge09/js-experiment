@@ -10,8 +10,9 @@ function BackgroundFrame(props)
     var self = this;
     var speed = props.speed || 5;
     var y = 0;
+    self.bullets = 0;
     var enemy;
-    score = 0;
+    self.score = 0;
     var speedratio = 0;
     var hero = props.hero;
     var $hero = props.$hero;
@@ -90,17 +91,43 @@ function BackgroundFrame(props)
             if ((Math.abs(oneenemy.x - hero.carX)) < 100 && (Math.abs(oneenemy.y - hero.carY) < 100))
             {
                 alert("GAME OVER");
-//                enemies.forEach(function (enemy)
-//                {
-//                    enemy.deleteEnemy(enemy);
-//                });
+//                
 //                enemies = [];
 //                speed = undefined;
 //                delete score;
-//                resetGame();
+//                self.reset();
                 location.reload();
             }
         });
+    };
+
+
+    self.reset = function ()
+    {
+        var temp_enemys = enemies;
+        for (var i = 0; i < temp_enemys.length; i++)
+        {
+            temp_enemys[i].deleteEnemy();
+            temp_enemys[i] = null;
+        }
+        enemies = self.clearArray(temp_enemys);
+        console.log(enemies);
+
+        var temp_bullets = self.bullets;
+        for (var y = 0; y < temp_bullets.length; y++)
+        {
+            if (temp_bullets[y] !== null)
+            {
+                temp_bullets[y].deleteBullet();
+                temp_bullets[y] = null;
+            }
+
+        }
+        self.bullets = self.clearBulletArray(temp_bullets);
+        console.log(self.bullets);
+        y=0;
+        speed = 0;
+        resetGame();
     };
 
     self.bulletEnemiesCollision = function (oneenemy, bullet)
@@ -108,7 +135,6 @@ function BackgroundFrame(props)
 
         if (bullet !== null)
         {
-            console.log("diff", oneenemy.y - bullet.bulletY);
             if ((Math.abs(oneenemy.y - bullet.bulletY)) < 100 && ((oneenemy.x < bullet.bulletX) && (oneenemy.x + 100 > bullet.bulletX)))
             {
 
@@ -122,11 +148,12 @@ function BackgroundFrame(props)
 
     self.scoreboard = function ()
     {
-        $scoreboard.innerHTML = score;
+        $scoreboard.innerHTML = self.score;
     };
 
     self.updateBullets = function (bullets)
     {
+        self.bullets = bullets;
         for (var i = 0; i < bullets.length; i++)
         {
             if (bullets[i] !== null)
@@ -138,11 +165,11 @@ function BackgroundFrame(props)
 
                     if (self.bulletEnemiesCollision(enemy, bullets[i]))
                     {
-                        
+
                         enemy.health -= 1;
                         if (enemy.health === 0)
                         {
-                            score = score + 1;
+                            self.score = self.score + 1;
                             enemy.deleteEnemy();
                             enemies.splice(enemies.indexOf(enemy), 1);
 
