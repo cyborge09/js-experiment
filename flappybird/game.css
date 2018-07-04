@@ -1,0 +1,65 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 03-Jul-2018, 11:15:45
+    Author     : Samael
+*/
+
+
+.game {
+    display:none;
+
+}
+
+.homescreen{
+    background-repeat: repeat-x;
+    position: absolute;
+    z-index: 2;
+    background-position:0 100%;
+    overflow: hidden;
+    
+
+}
+.homescreenbackground{
+    position:relative;
+    margin: 0 auto;
+    background-repeat: repeat-x;
+    overflow: hidden;
+}
+
+.bird
+{
+    position : absolute;
+    background-image :url("images/flappy.gif");
+    background-size: 100%;
+
+}
+.pipe
+{
+    overflow: hidden;
+    position:absolute;
+    z-index: 1;
+    background-image: url("images/pipe-green.png");
+    overflow: hidden;
+    background-repeat: no-repeat;
+}
+.scoreboard
+{
+    z-index: 3;
+    position:absolute;
+    width:auto;
+    height : auto;
+    color:white;
+    font-size: 50px;
+}
+
+.reset
+{
+    position:absolute;
+    z-index: 4;
+    display: none;
+    color:white;
+}

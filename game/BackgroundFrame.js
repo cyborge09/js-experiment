@@ -94,7 +94,7 @@ function BackgroundFrame(props)
             {
                 if ((Math.abs(oneenemy.x - hero.carX)) < 100 && (Math.abs(oneenemy.y - hero.carY) < 100))
                 {
-                    hero.$hero.style.backgroundImage = "url(images/boom.gif)";
+                    hero.$hero.style.backgroundImage = "url(images/boom.png)";
                     clearInterval(interval);
                     $gameover.style.display = "block";
                     $gameoverscore.innerHTML = "SCORE :" + self.score;
@@ -186,13 +186,6 @@ function BackgroundFrame(props)
 
                         if (enemy.health === 0)
                         {
-                            setInterval(function ()
-                            {
-                                console.log("here");
-                                enemy.elem.style.backgroundImage = "url(images/boom.png)";
-//                                enemy.elem.style.backgroundImage = "url(images/enemyship.png)";
-
-                            }, 15);
 
                             self.score = self.score + 1;
                             enemy.deleteEnemy();
@@ -223,7 +216,8 @@ function BackgroundFrame(props)
 
         bullets = self.clearBulletArray(bullets);
     };
-
+    
+    
     self.clearBulletArray = function (bullets)
     {
 

@@ -4,32 +4,37 @@
  * and open the template in the editor.
  */
 
-    var $homescreen = document.getElementById("homescreen");
+
+function playgame1()
+{
+
+    $homescreen = document.getElementById("homescreen");
     $homescreen.style.display = "block";
     var $start = document.getElementById("start");
-    $start.onclick = function()
+    $start.onclick = function ()
     {
         console.log("here");
         resetGame();
     };
+}
 
 function resetGame()
 {
-    $homescreen.style.display="none";
+    $homescreen.style.display = "none";
     var $mainContainer = document.getElementById("mainContainer");
     var $gameContainer = document.getElementById("gameContainer");
-    
+
     var $hero = new Hero();
     $hero.initializeCar();
 
-    
+
     var animation = new Animation(
             {
                 delay: 15,
                 backgroundframe:
                         {
                             gamecontainer: $gameContainer
-                           
+
                         },
                 hero: $hero
             });
@@ -39,7 +44,7 @@ function resetGame()
     document.addEventListener('keydown', function (e)
     {
 
-      
+
         if (e.key === "ArrowRight")
         {
             console.log("right");
@@ -52,10 +57,10 @@ function resetGame()
             $hero.update(-1);
 
         }
-      
+
 
 
     });
 }
 
- 
+ playgame1();

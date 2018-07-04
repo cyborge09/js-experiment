@@ -33,10 +33,15 @@ function Enemy(props)
 
 
     self.deleteEnemy = function () {
-
-        $parent.removeChild(self.elem);
+        self.elem.style.backgroundImage = "url(images/giphy.gif)";
+        var timeid = window.setTimeout(bgAnime,300);
+        
     };
 
+    var bgAnime = function(){
+//        alert("destroyed")
+        $parent.removeChild(self.elem);
+    };
 
     function randomX()
     {
