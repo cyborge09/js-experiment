@@ -18,17 +18,19 @@ class Candy
         this.drag = false;
         this.animateloop;
         this.count = 0;
+        this.reset_flag = false;
         this.animatetime = 0;
         this.ANIMATION_DELAY = 0.2;
         this.clusterLength = 1;
         this.lastpframe = 0;
-        this.timeframe;
-        this.GAME_TIME = 20;
+        this.timeframe = 0;
+        this.GAME_TIME = 200;
         this.showtime = this.GAME_TIME;
         this.timegone = 0;
         this.score = 0;
         this.fpstime = 0;
-        this.step = 3;
+        this.STEP_GIVEN = 2;
+        this.stepleft = this.STEP_GIVEN;
         this.framecount = 0;
         this.fps = 0;
         this.moves = [];
@@ -37,14 +39,17 @@ class Candy
             y: 100,
             tilewidth: 40,
             tileheight: 40,
-            columns: 6,
-            rows: 6,
+            columns: 3,
+            rows: 3,
             tiles: [],
             tileselect: {selected: false, column: 0, row: 0}
         };
+        this.animatereadytime = 0;
         this.currentmove = {col1: 0, row1: 0, col2: 0, row2: 0};
         this.buttons = [
-            {x: 30, y: 240, width: 150, height: 50, text: "New Game"}
+            {x: 30, y: 240, width: 150, height: 50, text: "New Game"},
+            {x: 30, y: 300, width: 150, height: 50, text: "Show Moves"},
+            {x: 30, y: 360, width: 150, height: 50, text: "RESET"}
         ];
 
         this.animationLoop = this.animationLoop.bind(this);
@@ -67,6 +72,7 @@ class Candy
         this.gameover = false;
         this.getMousePos = this.getMousePos.bind(this);
         this.getMouseTile = this.getMouseTile.bind(this);
+        this.showmove = false;
         this.mouseUp = this.mouseUp.bind(this);
         this.mouseDown = this.mouseDown.bind(this);
         this.mouseOut = this.mouseOut.bind(this);
@@ -97,17 +103,23 @@ class Candy
 
     startGame()
     {
-
+        if (this.reset_flag)
+        {
+            this.reset_flag = false;
+        }
+        if (this.gameover)
+        {
+            this.reset = 0;
+            this.timeframe = 0;
+            this.lastframe = 0;
+            this.timegone = 0;
+            this.showtime = this.GAME_TIME;
+            this.gameover = false;
+            this.score = 0;
+            this.stepleft = this.STEP_GIVEN;
+        }
         this.gamestate = this.gamestates.ready;
-        this.stepleft = this.step;
         this.active = true;
-        this.score = 0;
-        this.reset =0;
-        this.timeframe = 0;
-        this.lastframe = 0;
-        this.timegone = 0;
-        this.showtime = this.GAME_TIME;
-        this.gameover = false;
         this.createLevel();
         this.findmoves();
         this.destroyClusters();
@@ -125,52 +137,54 @@ class Candy
         if (this.active)
         {
             this.animateloop = window.requestAnimationFrame(this.animationLoop);
-        }
-        else
+        } else
         {
-            this.animateloop=window.cancelAnimationFrame(this.animateloop);
+            this.animateloop = window.cancelAnimationFrame(this.animateloop);
         }
     }
 
     updateGame(fframe)
     {
         //reset the frame value for 1time
-        if(this.reset === 0)
+        if (this.reset === 0)
         {
             fframe = 0;
             this.reset++;
         }
-        
+
         // fframe =0 and lastframe = 0 from above declaration so frame =0 in next iteration the fframe value goes to normal say (13355)and then the last fame is also near 13355 so the diff gives less than 0 which is added to time gone...it doesnt give accurate time second but it works,,need to find accurate time later
         let frame = (fframe - this.lastframe) / 1000;
-        
+
         //last frame value is set to present frame value from performance now function for one time
-        if(this.reset === 0)
+        if (this.reset === 0)
         {
             this.lastframe = this.lastpframe;
             this.reset++;
-        }
-        else//after one iteration the lastframe value is back to fframe
+        } else//after one iteration the lastframe value is back to fframe
         {
-              this.lastframe = fframe;
+            this.lastframe = fframe;
         }
-      //timeframe is set to frame
+        //timeframe is set to frame
         this.timeframe += frame;
-               //if only time frame goes to 1 ie 1second
-        if(this.timeframe>=1)
+        //if only time frame goes to 1 ie 1second
+        if (this.timeframe >= 1)
         {
             this.timegone += this.timeframe;//add 1sec to timegone
             this.showtime = this.GAME_TIME - this.timegone;//remove 1sec from gametime and set to showtime
-            this.timeframe=0;//set the timeframe back to 0
+            this.timeframe = 0;//set the timeframe back to 0
         }
-        
+
 
         if (this.gamestate === this.gamestates.ready)
         { ///gamestate is ready for useinput
+
             if (this.moves.length <= 0)
             {
-                this.gameover = true;
+//                this.gameover = true;
+                this.reset_flag = true;
+
             }
+
 
         }
 
@@ -197,15 +211,16 @@ class Candy
                     this.shiftTileAndSwapTile();
 //                after swapping tiles the layout is to be checked for cluster so send back to searchcluster animation state
 
-
+                    this.animationstate = this.animationstates.searchcluster;
+                    this.animatetime = 0;
                     this.searchCluster();
                     if (this.clusters.length <= 0)
                     {
+                        console.log("shifttilescluster", this.clusters.length);
 //                    if the cluster length is 0 then game state is set to ready for user input
                         this.gamestate = this.gamestates.ready;
                     }
-                    this.animationstate = this.animationstates.searchcluster;
-                    this.animatetime = 0;
+
                 }
 
             }
@@ -215,6 +230,7 @@ class Candy
                 if (this.animatetime > this.ANIMATION_DELAY) {
                     //search clusters and point score
                     this.searchCluster();
+
                     if (this.clusters.length > 0)
                     {
                         for (let i = 0; i < this.clusters.length; i++)
@@ -258,14 +274,21 @@ class Candy
                         //if the cluster are present the cluster are to be removed so animation state is changed to searchcluster
                         this.animationstate = this.animationstates.searchcluster;
                         this.gamestate = this.gamestates.process;
+
                     } else
                     {
                         //not valid then send for reverse swap in animation state reverseswap
                         this.animationstate = this.animationstates.reverseswap;
+
                     }
                     this.animatetime = 0;
+                    this.findmoves();
+                    this.searchCluster();
                 }
+
             }
+            this.findmoves();
+            this.searchCluster();
         }
     }
 
@@ -292,6 +315,16 @@ class Candy
             this.gameover = true;
 
         }
+        if (this.reset_flag && this.stepleft !== 0)
+        {
+            this.ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
+            this.ctx.fillRect(this.stage.x, this.stage.y, (this.stage.columns * this.stage.tilewidth) + 3, (this.stage.rows * this.stage.tileheight) + 3);
+
+            this.ctx.fillStyle = "#ffffff";
+            this.ctx.font = "24px Verdana";
+            this.ctx.fillText("NO STEPS LEFT", this.stage.x + (((this.stage.columns * this.stage.tilewidth) / 4)), this.stage.y + ((this.stage.columns * this.stage.tileheight) + 3) / 2 + 10, ((this.stage.columns * this.stage.tilewidth) / 2));
+            this.active = false;
+        }
 //       ---------------------------- check if gameover------------------------------------
         if (this.gameover)
         {
@@ -302,7 +335,7 @@ class Candy
 
             this.ctx.fillStyle = "#ffffff";
             this.ctx.font = "24px Verdana";
-            this.ctx.fillText("Game Over!", this.stage.x + (((this.stage.columns * this.stage.tilewidth) / 4)), this.stage.y + ((this.stage.columns * this.stage.tileheight) + 3) / 2 + 10, ((this.stage.columns * this.stage.tilewidth) / 2));
+            this.ctx.fillText("Game Over", this.stage.x + (((this.stage.columns * this.stage.tilewidth) / 4)), this.stage.y + ((this.stage.columns * this.stage.tileheight) + 3) / 2 + 10, ((this.stage.columns * this.stage.tilewidth) / 2));
             this.active = false;
         }
     }
@@ -336,28 +369,32 @@ class Candy
         {
             this.ctx.fillText("0", 470, 30);
         }
-
-
-
-
         //       ----------------------time left-----------------------
-
-
         this.ctx.fillStyle = "#000000";
         this.ctx.font = '30px Arial';
         this.ctx.fillText('TIME-LEFT:', 600, 30);
         this.ctx.fillStyle = "#ffffff";
         this.ctx.fillText(Math.round(this.showtime), 770, 30);
 
+        //       ----------------------show moves -----------------------
+        this.ctx.fillStyle = "#000000";
+        this.ctx.font = '30px Arial';
+        this.ctx.fillText('Available moves:', 100, 130);
+        this.ctx.fillStyle = "#ffffff";
+        if (this.showmove)
+        {
+            this.ctx.fillText(this.moves.length, 330, 131);
+        }
+
+
 //         ---------------------for buttons----------------
         for (let i = 0; i < this.buttons.length; i++)
         {
             this.ctx.fillStyle = '#000000';
             this.ctx.fillRect(this.buttons[i].x, this.buttons[i].y, this.buttons[i].width, this.buttons[i].height);
-
             this.ctx.fillStyle = '#ffffff';
             this.ctx.font = '20px Arial';
-            this.ctx.fillText(this.buttons[i].text, this.buttons[i].x + 25, this.buttons[i].y + 30);
+            this.ctx.fillText(this.buttons[i].text, this.buttons[i].x + 20, this.buttons[i].y + 32);
 
         }
 
@@ -467,7 +504,8 @@ class Candy
 
     }
 
-    drawTile(x, y, r, g, b) {
+    drawTile(x, y, r, g, b)
+    {
         this.ctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
         this.ctx.fillRect(x + 2, y + 2, this.stage.tilewidth - 3, this.stage.tileheight - 3);
     }
@@ -491,9 +529,11 @@ class Candy
 
 //           ------------------- find available moves in the stage------------------
 //           
+
             this.findmoves();
             if (this.moves.length > 0)
             {
+
                 this.levelCreated = true;
             }
 
@@ -535,6 +575,8 @@ class Candy
                 }
             }
         }
+
+
     }
 
     destroyClusters()
@@ -730,12 +772,17 @@ class Candy
 
     }
 
-    getRandomTile() {
+    getRandomTile()
+    {
         return Math.floor(Math.random() * this.tilecolors.length);
     }
 
     mouseDown(e)
     {
+        if (this.stepleft === 0)
+        {
+            this.gameover = true;
+        }
         let pos = this.getMousePos(canvas, e);
 
         if (!this.drag)
@@ -788,9 +835,17 @@ class Candy
 
 //                     Button i was clicked
                 if (i === 0) {
-                    console.log("reset");
+                    this.gameover = true;
                     this.startGame();
-
+                } else if (i === 1)
+                {
+                    this.showmove = true;
+                } else if (i === 2)
+                {
+                    if (this.reset_flag && !this.gameover)
+                    {
+                        this.startGame();
+                    }
                 }
             }
         }
@@ -836,11 +891,14 @@ class Candy
     mouseUp() {
 
         this.drag = false;
+        this.showmove = false;
+
     }
 
     mouseOut() {
 
         this.drag = false;
+        this.showmove = false;
     }
 
     getMousePos(canvas, e)
