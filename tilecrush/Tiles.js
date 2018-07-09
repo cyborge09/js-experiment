@@ -291,11 +291,14 @@ class Tiles
 
                     }
                     this.animatetime = 0;
+                    //update moves and cluster after swapping
                     this.findmoves();
                     this.searchCluster();
                 }
 
             }
+            
+            //update the moves and cluster
             this.findmoves();
             this.searchCluster();
         }
@@ -495,8 +498,6 @@ class Tiles
                 if (this.clusters[i].horizontal)
                 {
                     this.ctx.fillStyle = '#ffffff';
-
-
                     this.ctx.fillRect(cluscord.tileX + this.stage.tilewidth / 2, cluscord.tileY + this.stage.tileheight / 2, (this.clusters[i].length - 1) * this.stage.tilewidth, 5);
                 } else
                 {
@@ -559,7 +560,7 @@ class Tiles
         this.moves = [];
 //     -------------------   for horizontal move finding----------------------
 
-        for (let i = 0; i < this.stage.rows; i++)
+        for (let i = 0; i < this .stage.rows; i++)
         {
             for (let j = 0; j < this.stage.columns - 1; j++)
             {
